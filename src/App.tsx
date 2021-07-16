@@ -1,24 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
+import { Route, Switch } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
 import './App.css';
+import Header from './components/header/Header';
+import Auth from './pages/auth/Auth';
+import Main from './pages/main/Main';
+import LogOut from './pages/logout/LogOut';
+import { authCheck } from './store/actionCreators/authActions';
+
 
 function App() {
+
+  const dispatch = useDispatch();
+
+  React.useEffect( () => {
+    dispatch(authCheck())
+    // eslint-disable-next-line
+  }, [] )
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App"> 
+      <div className="Container">
+        <Header />
+
+        <Switch>
+          <Route path="/logout" component={LogOut}/>
+          <Route path="/auth" component={Auth}/>
+          <Route path="/" component={Main}/>
+        </Switch>
+      </div>
     </div>
   );
 }
