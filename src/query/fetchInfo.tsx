@@ -75,7 +75,31 @@ export const getInfo = (element: any) => {
     if (pilot.length > 0) filteredInfo.push({key: 'pilot connection', data: pilot})
 
 
-
-
     return filteredInfo
+}
+
+export const post = (data: any, classes: any) => {
+    let info: any;
+    let gotInfo: any = [];
+    if (data) {
+        for (let item in data) {
+            gotInfo = getInfo(data[item])
+        }
+
+        info = (
+            <div className={classes.InfoDiv}>
+                {gotInfo.map( (item: any, index: number) => {
+                    if (item.data instanceof Object) {
+                        return (
+                        <div key={item.key + index}> 
+                            <span className={classes.Title}>{item.key}:</span> 
+                            {item.data.map( (item: any, index: number) => <p onClick = { () => console.log(item.id) } key={item.id + index}>{item.name}</p> )}
+                        </div>
+                        )
+                    } else return <p key={item.key + index}><span className={classes.Title}>{item.key}:</span> {item.data}</p>
+                } )}
+            </div>
+        )
+    }
+    return info
 }

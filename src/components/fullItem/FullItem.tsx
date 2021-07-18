@@ -1,11 +1,12 @@
 import { useQuery } from '@apollo/client';
 import React from 'react'
-import { GET_FILM, postFilm } from '../../query/films';
-import { GET_PERSON, postPerson } from '../../query/people';
-import { GET_PLANET, postPlanet } from '../../query/planets';
-import { GET_SPECIE, postSpecie } from '../../query/species';
-import { GET_STARSHIP, postStarship } from '../../query/starships';
-import { GET_VEHICLE, postVehicle } from '../../query/vehicles';
+import { post } from '../../query/fetchInfo';
+import { GET_FILM } from '../../query/films';
+import { GET_PERSON } from '../../query/people';
+import { GET_PLANET } from '../../query/planets';
+import { GET_SPECIE } from '../../query/species';
+import { GET_STARSHIP } from '../../query/starships';
+import { GET_VEHICLE } from '../../query/vehicles';
  
 import classes from './FullItem.module.sass'
 
@@ -46,20 +47,7 @@ const FullItem: React.FC<IProps> = ({id, type, hide}) => {
     })
 
     React.useEffect( () => {
-        switch (type) {
-            case 'Films':
-                setInfo(postFilm(data, classes)); break
-            case 'People':
-                setInfo(postPerson(data, classes)); break
-            case 'Planets':
-                setInfo(postPlanet(data, classes)); break    
-            case 'Species':
-                setInfo(postSpecie(data, classes)); break
-            case 'Starships':
-                setInfo(postStarship(data, classes)); break
-            case 'Vehicles':
-                setInfo(postVehicle(data, classes)); break
-        }
+        setInfo(post(data, classes))
         if (loading) setInfo(<p>loading</p>)
     }, [link, type, data, loading] )
 
