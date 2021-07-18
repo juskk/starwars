@@ -29,16 +29,19 @@ export const GET_PERSON = gql`
             filmConnection {
                 films {
                     title
+                    id
                 }
             }
             starshipConnection {
                 starships {
                     name
+                    id
                 }
             }
             vehicleConnection {
                 vehicles {
                     name
+                    id
                 }
             }
         }
@@ -59,7 +62,7 @@ export const postPerson = (data: any, classes: any) => {
                         return (
                         <div key={item.key + index}> 
                             <span className={classes.Title}>{item.key}:</span> 
-                            {item.data.map( (item: any) => <p key={item}>{item}</p> )}
+                            {item.data.map( (item: any) => <p key={item.id}>{item.name}</p> )}
                         </div>
                         )
                     } else return <p key={item.key + index}><span className={classes.Title}>{item.key}:</span> {item.data}</p>

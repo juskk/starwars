@@ -27,11 +27,13 @@ export const GET_PLANET = gql`
             residentConnection {
                 residents {
                     name
+                    id
                 }
             }
             filmConnection {
                 films {
                     title
+                    id
                 }
             }
         } 
@@ -51,7 +53,7 @@ export const postPlanet = (data: any, classes: any) => {
                         return (
                         <div key={item.key + index}> 
                             <span className={classes.Title}>{item.key}:</span> 
-                            {item.data.map( (item: any) => <p key={item}>{item}</p> )}
+                            {item.data.map( (item: any) => <p onClick = { () => console.log(item.id) } key={item.id}>{item.name}</p> )}
                         </div>
                         )
                     } else return <p key={item.key + index}><span className={classes.Title}>{item.key}:</span> {item.data}</p>
