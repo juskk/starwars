@@ -2,18 +2,18 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLongArrowAltDown } from '@fortawesome/free-solid-svg-icons'
+import { useQuery } from '@apollo/client'
 
 import classes from './Main.module.sass'
 import { RootState } from '../../store'
 import Input from '../../UI/input/Input'
-import { useQuery } from '@apollo/client'
 import { GET_ALL_FILMS } from '../../query/films'
 import { GET_ALL_PEOPLE } from '../../query/people'
-import PreviewItem from '../../components/previewItem/PreviewItem'
 import { GET_ALL_PLANETS } from '../../query/planets'
 import { GET_ALL_SPECIES } from '../../query/species'
 import { GET_ALL_STARSHIPS } from '../../query/starships'
 import { GET_ALL_VEHICLES } from '../../query/vehicles'
+import PreviewItem from '../../components/previewItem/PreviewItem'
 import FullItem from '../../components/fullItem/FullItem'
 
 const Main = () => {
@@ -33,11 +33,14 @@ const Main = () => {
     const [items, setItems] = React.useState<any[]>([])
     const [basicItems, setBasicItems] = React.useState<any[]>([]);
 
+    const [fullItem, setFullItem] = React.useState<any>(null)
+
+
     const [search, setSearch] = React.useState<string>('');
 
     const [dropDownVisible, setDropDownVisible] = React.useState(true)
 
-    const [fullItem, setFullItem] = React.useState<any>(<FullItem visible={false}/>)
+    
 
     React.useEffect( () => {
         switch (selectedField) {
@@ -93,23 +96,6 @@ const Main = () => {
 
     let previewItems: any = null;
 
-    const passFullItem = (id: string) => {
-        setFullItem(
-        <FullItem 
-            visible={true} 
-            id={id} 
-            type={selectedField} 
-            hide = { () => setFullItem (
-                <FullItem 
-                visible={false} 
-                id={id} 
-                type={selectedField} />
-                )
-            }/>
-        )
-    }
-
-
     if (items) {
         previewItems = items.map( item => {
             return <PreviewItem 
@@ -117,10 +103,14 @@ const Main = () => {
                     main={item.title || item.name} 
                     type={selectedField} 
                     id={item.id}
-                    onClick={() => passFullItem(item.id)}/>
+                    onClick={ () => setFullItem(
+                    <FullItem 
+                    id={item.id} 
+                    type={selectedField} 
+                    hide={ () => setFullItem(null) }/>
+                    ) }/>
         } );
     }
-
     if (loading) {previewItems = <p>loading</p>}
     if (error) previewItems = <p>An error occurred</p>
 
@@ -186,13 +176,17 @@ const Main = () => {
                 {previewItems}
             </div>
 
-            {fullItem}
         </div>
     )
+
+    if (fullItem) {
+        pageInfo = fullItem
+    }
 
     return (
         <div style={{color: 'white'}}>
             {pageInfo}
+            <div style={{height: '30px', width: '100%'}}></div>
         </div>
     )
 }

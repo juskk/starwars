@@ -1,17 +1,41 @@
 .FullItemDiv
-    position: absolute
-    z-index: 100
-    max-width: 700px
+    position: relative
+    margin: 0 auto
+    max-width: 500px
     width: 100%
-    max-height: 70vh
+    min-height: 60vh
+    max-height: 60vh
     height: 100%
-    top: 0
-    left: calc( 50% - 350px )
-    background-color: red
+    padding: 40px 20px
+    background-color: black
+    border: 1px solid white
+    border-radius: 10px
     transition: .4s
+    overflow: scroll
+.Back
+    margin-left: 64vw
+    margin-top: -3vh
+    position: fixed
+    cursor: pointer
+
+.InfoDiv
+    p
+        margin: 10px 0
+        letter-spacing: 2px
+
+.Title
+    font-weight: 600
+    color: #c2e8ff
+
+
 
 .Visible
     transform: translateY(0)
 
 .Hidden
     transform: translateY(-250%)
+
+@media (max-width: 700px)
+    .FullItemDiv
+        max-width: 70%
+        width: 100%
