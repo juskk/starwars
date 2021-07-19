@@ -1,21 +1,24 @@
-.FullItemDiv
-    position: relative
-    margin: 0 auto
-    max-width: 500px
+.PageDiv
+    display: flex
+    justify-content: center
+    max-width: 100%
     width: 100%
-    min-height: 60vh
-    max-height: 60vh
-    height: 100%
-    padding: 40px 20px
-    background-color: black
-    border: 1px solid white
-    border-radius: 10px
-    transition: .4s
-    overflow: scroll
-.Back
-    margin-top: -3vh
-    position: fixed
-    cursor: pointer
+    .FullItemDiv
+        max-width: 500px
+        width: 70%
+        min-height: 60vh
+        max-height: 60vh
+        height: 100%
+        padding: 40px 20px
+        background-color: black
+        border: 1px solid white
+        border-radius: 10px
+        transition: .4s
+        overflow: scroll
+        .Back
+            margin-top: -10px
+            position: absolute
+            cursor: pointer
 
 .InfoDiv
     p
@@ -26,6 +29,10 @@
     font-weight: 600
     color: #c2e8ff
 
+.ClickableText
+    cursor: pointer
+    font-style: italic
+
 
 
 .Visible
@@ -35,6 +42,9 @@
     transform: translateY(-250%)
 
 @media (max-width: 700px)
+    .PageDiv
+        flex-direction: column
+        align-items: center
     .FullItemDiv
         max-width: 70%
         width: 100%

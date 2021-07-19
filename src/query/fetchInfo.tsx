@@ -78,7 +78,7 @@ export const getInfo = (element: any) => {
     return filteredInfo
 }
 
-export const post = (data: any, classes: any) => {
+export const post = (data: any, classes: any, load: any) => {
     let info: any;
     let gotInfo: any = [];
     if (data) {
@@ -90,10 +90,18 @@ export const post = (data: any, classes: any) => {
             <div className={classes.InfoDiv}>
                 {gotInfo.map( (item: any, index: number) => {
                     if (item.data instanceof Object) {
+                        let title = item.key;
                         return (
                         <div key={item.key + index}> 
                             <span className={classes.Title}>{item.key}:</span> 
-                            {item.data.map( (item: any, index: number) => <p onClick = { () => console.log(item.id) } key={item.id + index}>{item.name}</p> )}
+                            {item.data.map( (it: any, index: number) => {
+                                return <p 
+                                        className={classes.ClickableText} 
+                                        onClick = { () => load(it.id, title, it.name ) } 
+                                        key={it.id + index}>
+                                            {it.name}
+                                        </p>
+                            } )}
                         </div>
                         )
                     } else return <p key={item.key + index}><span className={classes.Title}>{item.key}:</span> {item.data}</p>

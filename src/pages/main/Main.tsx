@@ -15,10 +15,12 @@ import { GET_ALL_STARSHIPS } from '../../query/starships'
 import { GET_ALL_VEHICLES } from '../../query/vehicles'
 import PreviewItem from '../../components/previewItem/PreviewItem'
 import FullItem from '../../components/fullItem/FullItem'
+import SearchHistory from '../../components/searchHistory/SearchHistory'
 
 const Main = () => {
 
     const auth = useSelector((state: RootState) => state.auth)
+
 
     const [fields, setFields] = React.useState([
         {checked: true, type: 'Films', id: 0},
@@ -32,11 +34,12 @@ const Main = () => {
     const [link, setLink] = React.useState(GET_ALL_FILMS);
     const [items, setItems] = React.useState<any[]>([])
     const [basicItems, setBasicItems] = React.useState<any[]>([]);
-
     const [fullItem, setFullItem] = React.useState<any>(null)
 
 
     const [search, setSearch] = React.useState<string>('');
+    const [history, setHistory] = React.useState<any[]>([])
+
 
     const [dropDownVisible, setDropDownVisible] = React.useState(true)
 
@@ -97,9 +100,9 @@ const Main = () => {
     let previewItems: any = null;
 
     if (items) {
-        previewItems = items.map( item => {
+        previewItems = items.map( (item, index) => {
             return <PreviewItem 
-                    key={item.id} 
+                    key={item.id + index} 
                     main={item.title || item.name} 
                     type={selectedField} 
                     id={item.id}
@@ -122,6 +125,7 @@ const Main = () => {
         newFields[id].checked = true;
         setSearch('')
         setFields(newFields)
+        setHistory([...history, {type: 'changedField', value: newFields[id].type}]) //!
         setSelectedField(newFields[id].type)
     }
      
@@ -136,6 +140,7 @@ const Main = () => {
 
     const toSearch = (event: React.FormEvent<HTMLInputElement>) => {
         setSearch(event.currentTarget.value)
+        setHistory([...history, {type: 'changedSearchParam', value: event.currentTarget.value}])
     }
 
     let pageInfo = <p className={classes.WarningText}>Log in to start</p>
@@ -172,8 +177,12 @@ const Main = () => {
 
             </div>
 
-            <div className={classes.PreviewItems}>
-                {previewItems}
+            <div className={classes.MainBlock}>
+                <div className={classes.PreviewItems}>
+                    {previewItems}
+                </div>
+
+                <SearchHistory searchHistory={history}/>
             </div>
 
         </div>
