@@ -16,8 +16,8 @@ const LogOut: React.FC = () => {
 
     return (
         <div>
-            <div>
-                <Button clicked={ () => dispatch(toLogOut(0)) } type="white">Log out</Button>
+            <div >
+                <Button clicked={ () => dispatch(toLogOut(0)) } type="white">Log out</Button>  
             </div>
             {redirect}
         </div>

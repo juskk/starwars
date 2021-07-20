@@ -11,11 +11,11 @@ const Header = () => {
 
     let changingLinks = (
         <React.Fragment>
-            <NavLink activeStyle={{color: '#7bbfff'}} to="/auth/login" className={classes.Link}>Log in </NavLink>
-            <NavLink activeStyle={{color: '#7bbfff'}} to="/auth/signup" className={classes.Link}>Sign up</NavLink>
+            <NavLink activeClassName={classes.Active} to="/auth/login" className={classes.Link}>Log in </NavLink>
+            <NavLink activeClassName={classes.Active} to="/auth/signup" className={classes.Link}>Sign up</NavLink>
         </React.Fragment>
     )
-    if (auth.token) changingLinks = <NavLink activeStyle={{color: '#7bbfff'}} to="/logout" className={classes.Link}>Log out</NavLink>
+    if (auth.token) changingLinks = <NavLink activeClassName={classes.Active} to="/logout" className={classes.Link}>Log out</NavLink>
 
     return (
         <div className={classes.Header}>
@@ -27,7 +27,7 @@ const Header = () => {
             </div>
             <div className={classes.Line}/>
             <div className={classes.Links}>
-                <NavLink activeStyle={{color: '#7bbfff'}} exact to="/" className={classes.Link}>Menu</NavLink>
+                <NavLink activeClassName={classes.Active} exact to="/" className={classes.Link}>Menu</NavLink>
                 {changingLinks}
             </div>
         </div>
