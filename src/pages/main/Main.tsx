@@ -4,12 +4,7 @@ import { useQuery } from '@apollo/client'
 
 import classes from './Main.module.sass'
 import { RootState } from '../../store'
-import { GET_ALL_FILMS } from '../../query/films'
-import { GET_ALL_PEOPLE } from '../../query/people'
-import { GET_ALL_PLANETS } from '../../query/planets'
-import { GET_ALL_SPECIES } from '../../query/species'
-import { GET_ALL_STARSHIPS } from '../../query/starships'
-import { GET_ALL_VEHICLES } from '../../query/vehicles'
+import * as queryTypes from '../../graphql/query/index'
 import SearchHistory from '../../components/searchHistory/SearchHistory'
 import Search from '../../components/search/Search'
 import PreviewItems from '../../components/previewItems/PreviewItems'
@@ -28,7 +23,7 @@ const Main = () => {
         {checked: false, type: 'Vehicles', id: 5},
     ])
     const [selectedField, setSelectedField] = React.useState('Films')
-    const [link, setLink] = React.useState(GET_ALL_FILMS);
+    const [link, setLink] = React.useState(queryTypes.GET_ALL_FILMS);
     const [items, setItems] = React.useState<any[]>([])
     const [basicItems, setBasicItems] = React.useState<any[]>([]);
     const [fullItem, setFullItem] = React.useState<any>(null)
@@ -45,22 +40,22 @@ const Main = () => {
     React.useEffect( () => {
         switch (selectedField) {
             case 'Films':
-                setLink(GET_ALL_FILMS)
+                setLink(queryTypes.GET_ALL_FILMS)
                 return
             case 'People':
-                setLink(GET_ALL_PEOPLE)
+                setLink(queryTypes.GET_ALL_PEOPLE)
                 return
             case 'Planets':
-                setLink(GET_ALL_PLANETS)
+                setLink(queryTypes.GET_ALL_PLANETS)
                 return
             case 'Species':
-                setLink(GET_ALL_SPECIES)
+                setLink(queryTypes.GET_ALL_SPECIES)
                 return
             case 'Starships':
-                setLink(GET_ALL_STARSHIPS)
+                setLink(queryTypes.GET_ALL_STARSHIPS)
                 return
             case 'Vehicles':
-                setLink(GET_ALL_VEHICLES)
+                setLink(queryTypes.GET_ALL_VEHICLES)
                 return
         }
     }, [selectedField] )
