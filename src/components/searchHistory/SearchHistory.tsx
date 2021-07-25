@@ -15,12 +15,14 @@ const SearchHistory: React.FC<IProps> = (props) => {
                 let text: any;
                 if (item.type === 'changedField') {
                     text =  <p  key={item.type + index} 
-                                className={classes.Type}>
+                                className={classes.Type}
+                                onClick={ () => props.clicked(item.type, item.value) }>
                                 {item.value}
                             </p>
                 } else if (item.type === 'changedSearchParam') {
                     text =  <p  key={item.type + index} 
-                                className={classes.Text}>
+                                className={classes.Text}
+                                onClick={ () => props.clicked(item.type, item.value) }>
                                 {item.value}
                             </p>
                 } else if (item.type === 'changedItem') {

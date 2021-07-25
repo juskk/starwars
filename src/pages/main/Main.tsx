@@ -73,43 +73,76 @@ const Main = () => {
     }, [data] )
 
     React.useEffect( () => {
-        if (search.trim() !== "") {
-            let newItems = [];
-            let checkingPhrase = search.toUpperCase()
-            for (let item in basicItems) {
-                let checkingProp = basicItems[item].name || basicItems[item].title
-                let theCheackingProp = checkingProp.toUpperCase()
-                if (theCheackingProp.includes(checkingPhrase)) {
-                    newItems.push(basicItems[item])
+        let delay = setTimeout(function() {
+
+            if (search.trim() !== "") {
+                let newItems = [];
+                let checkingPhrase = search.toUpperCase()
+                for (let item in basicItems) {
+                    let checkingProp = basicItems[item].name || basicItems[item].title
+                    let theCheackingProp = checkingProp.toUpperCase()
+                    if (theCheackingProp.includes(checkingPhrase)) {
+                        newItems.push(basicItems[item])
+                    }
                 }
+                setItems(newItems)
+            } else {
+                setItems(basicItems) 
             }
-            setItems(newItems)
-        } else {
-            setItems(basicItems) 
-        }
+
+            setHistory([...history, {type: 'changedSearchParam', value: search }])
+        }, 1000); 
+
+        return () => clearTimeout(delay)
+        // eslint-disable-next-line
     }, [search, basicItems] )
 
     //------------------------------
 
 
     const changeSelectedField = (id: number) => {
-        let newFields = fields;
-        for (let item in newFields) {
-            newFields[item].checked = false;
+        if (!fields[id].checked) {
+            let newFields = fields;
+            for (let item in newFields) {
+                newFields[item].checked = false;
+            }
+            newFields[id].checked = true;
+            setSearch('')
+            setFields(newFields)
+            setHistory([...history, {type: 'changedField', value: newFields[id].type}]) 
+            setSelectedField(newFields[id].type)
         }
-        newFields[id].checked = true;
-        setSearch('')
-        setFields(newFields)
-        setHistory([...history, {type: 'changedField', value: newFields[id].type}]) 
-        setSelectedField(newFields[id].type)
+
     }
      
 
-
     const toSearch = (event: React.FormEvent<HTMLInputElement>) => {
         setSearch(event.currentTarget.value)
-        setHistory([...history, {type: 'changedSearchParam', value: event.currentTarget.value}])
     }
+
+    const searchMenuItemClicked = (type: string, value: string) => {
+        if (selectedField !== value && search !== value) {
+            if (type === 'changedField') {
+                let newFields = JSON.parse(JSON.stringify(fields));
+                let fieldsId: number;
+                newFields.forEach( (item: any) => {
+                    if (item.type === value) {
+                        item.checked = true
+                        fieldsId = item.id
+                        setSelectedField(newFields[fieldsId].type)
+                    } else if (item.checked === true) item.checked = false
+                } )
+                setFields(newFields)
+                setSearch('')
+                
+            } else if (type === 'changedSearchParam') {
+                setSearch(value)
+            }
+            setHistory( prev => [...prev, {type, value}] )
+        }
+    }
+
+
 
     //-----------------------
 
@@ -129,7 +162,7 @@ const Main = () => {
                     loading={loading}
                     error={error}/>
 
-                <SearchHistory searchHistory={history}/>
+                <SearchHistory searchHistory={history} clicked={searchMenuItemClicked}/>
             </div>
 
         </div>
