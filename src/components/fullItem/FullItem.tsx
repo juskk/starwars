@@ -52,13 +52,13 @@ const FullItem: React.FC<IProps> = ({id, type, hide}) => {
             let type = itemsType.toUpperCase();
             let historyType: string;
             if (type.includes('FILM')) {setLink(queryTypes.GET_FILM); historyType = 'Film'}
-            else if (type.includes('SPECIES')) {setLink(queryTypes.GET_SPECIE); historyType = 'Specie'}
+            else if (type.includes('SPECIE')) {setLink(queryTypes.GET_SPECIE); historyType = 'Specie'}
             else if (type.includes('STARSHIP')) {setLink(queryTypes.GET_STARSHIP); historyType = 'Starship'}
             else if (type.includes('VEHICLE')) {setLink(queryTypes.GET_VEHICLE); historyType = 'Vehicle'}
-            else if (type.includes('PLANET')) {setLink(queryTypes.GET_PLANET); historyType = 'Planet'}
+            else if (type.includes('PLANET') || type.includes('HOMEWORLD')) {setLink(queryTypes.GET_PLANET); historyType = 'Planet'}
             else if (type.includes('CHARACTER' )) {setLink(queryTypes.GET_PERSON); historyType = 'Character'}
             else if (type.includes('RESIDENT')) {setLink(queryTypes.GET_PERSON); historyType = 'Resident'}
-            else if (type.includes('PERSON')) {setLink(queryTypes.GET_PERSON); historyType = 'Person'}
+            else if (type.includes('PEOPLE') || type.includes('PERSON')) {setLink(queryTypes.GET_PERSON); historyType = 'Person'}
             else if (type.includes('PILOT')) {setLink(queryTypes.GET_PERSON); historyType = 'Pilot'}
     
             setHistory(prev => [...prev, {type: 'changedItem', value: {type: historyType, value: value || 'value', id: id}}])

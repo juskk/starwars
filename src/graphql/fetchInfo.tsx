@@ -1,82 +1,33 @@
 export const getInfo = (element: any) => {
-    let gotInfo = [];
+    let gotInfo: any[] = [];
+    
+    console.log(element)
 
-    for (let key in element) {
-        if (element[key] instanceof Object) {
-            let inside1 = element[key];
-            for (let el in inside1) {
-                if (inside1[el] instanceof Object) {
-                    let inside2 = inside1[el];
-                    for (let item in inside2) {
-                        if (inside2[item] instanceof Object) {
-                            let inside3 = inside2[item]
-                            let obj = {id: '', name: ''};
-                            for (let item3 in inside3) {
-                                if (inside3[item3] instanceof Object) {
-                                    
-                                } else if (item3 !== 'id' && item3 !== '__typename') {
-                                    obj.name = inside3[item3]
-                                } else if (item3 === 'id') {
-                                    obj.id = inside3[item3]
-                                }
-                                
-                            }
-                            gotInfo.push({key: key, data: obj})  
+    function fetchInfo(items: any, firstCycle: boolean ) {
+        for (let key in items) {
 
-                        } else if (item !== '__typename') {gotInfo.push({key: inside1.__typename, data: inside2[item]})}
-                    }
-
-
-
-                } else if (el !== '__typename') gotInfo.push({key: key, data: inside1[el]})
-            } 
-        } else if (key !== '__typename') {
-            gotInfo.push({key, data: element[key]})
+            if (key.includes('Connection') ) {
+                fetchInfo(items[key], false)
+            }
+            else if (!firstCycle) {
+                if (items[key] instanceof Object) {
+                    if (items[key].length > 0) gotInfo.push({key: key, data: items[key]})
+                }
+            }
+            else {
+                gotInfo.push({key: key, data: items[key]})
+            }
         }
+        
     }
 
-    let filteredInfo = [];
-
-    let film: any = [], person: any = [];
-    let character: any = [];
-    let planet: any= [];
-    let species: any = [];
-    let starship: any = [];
-    let vehicle: any = [];
-    let resident: any = [];
-    let pilot: any = [];
-
-
-    for (let item in gotInfo) {
-        if (!gotInfo[item].key.includes('Connection')) {
-            filteredInfo.push({key: gotInfo[item].key, data: gotInfo[item].data})
-        } else {
-            switch (gotInfo[item].key) {
-                case 'filmConnection':film.push(gotInfo[item].data); break
-                case 'starshipConnection':starship.push(gotInfo[item].data); break
-                case 'vehicleConnection':vehicle.push(gotInfo[item].data); break
-                case 'residentConnection':resident.push(gotInfo[item].data); break
-                case 'speciesConnection':species.push(gotInfo[item].data); break
-                case 'characterConnection':character.push(gotInfo[item].data); break
-                case 'personConnection':person.push(gotInfo[item].data); break
-                case 'planetConnection':planet.push(gotInfo[item].data); break
-                case 'pilotConnection':pilot.push(gotInfo[item].data); break
-        }
-    }
+    fetchInfo(element, true)
+    if (gotInfo) console.log(gotInfo)
+ 
+    return gotInfo
 }
-    if (film.length > 0) filteredInfo.push({key: 'film connection', data: film})
-    if (person.length > 0) filteredInfo.push({key: 'person connection', data: person})
-    if (character.length > 0) filteredInfo.push({key: 'character connection', data: character})
-    if (planet.length > 0) filteredInfo.push({key: 'planet connection', data: planet})
-    if (species.length > 0) filteredInfo.push({key: 'species connection', data: species})
-    if (starship.length > 0) filteredInfo.push({key: 'starship connection', data: starship})
-    if (vehicle.length > 0) filteredInfo.push({key: 'vehicle connection', data: vehicle})
-    if (resident.length > 0) filteredInfo.push({key: 'resident connection', data: resident})
-    if (pilot.length > 0) filteredInfo.push({key: 'pilot connection', data: pilot})
 
 
-    return filteredInfo
-}
 
 export const post = (data: any, classes: any, load: any) => {
     let info: any;
@@ -85,26 +36,48 @@ export const post = (data: any, classes: any, load: any) => {
         for (let item in data) {
             gotInfo = getInfo(data[item])
         }
-
         info = (
             <div className={classes.InfoDiv}>
                 {gotInfo.map( (item: any, index: number) => {
                     if (item.data instanceof Object) {
-                        let title = item.key;
-                        return (
-                        <div key={item.key + index}> 
-                            <span className={classes.Title}>{item.key}:</span> 
-                            {item.data.map( (it: any, index: number) => {
-                                return <p 
-                                        className={classes.ClickableText} 
-                                        onClick = { () => load(it.id, title, it.name ) } 
-                                        key={it.id + index}>
-                                            {it.name}
-                                        </p>
-                            } )}
-                        </div>
+                        let hasObj = false;
+                        for (let it in item.data) {
+                            if (item.data[it] instanceof Object) hasObj = true
+                        }
+                        let title = item.key
+                        if (hasObj) {
+                            return (
+                                <div key={item + index}>
+                                    <span className={classes.Title}>{title}:</span>
+                                    {item.data.map( (el: any, index: number) => {
+                                        return (
+                                            <p 
+                                            className={classes.ClickableText} 
+                                            onClick = { () => load(el.id, title, el.name || el.title ) } 
+                                            key={el.id + index}>
+                                                {el.name || el.title}
+                                            </p>
+                                        )
+                                    } )}
+                                </div>
+                            )
+                        } else if (item.data.id) {
+                            return (
+                                <p 
+                                className={classes.ClickableText} 
+                                onClick = { () => load(item.data.id, title, item.data.name || item.data.title ) } 
+                                key={item.data.id + index}>
+                                    <span className={classes.Title}>{item.key}: </span>
+                                    {item.data.name || item.data.title}
+                                </p>     
+                            )
+                        } else return (
+                            <p key={item.key + index}><span className={classes.Title}>{item.key}:</span> {item.data}</p>
                         )
-                    } else return <p key={item.key + index}><span className={classes.Title}>{item.key}:</span> {item.data}</p>
+                    } else {
+                        if (item.data) return <p key={item.key + index}><span className={classes.Title}>{item.key}:</span> {item.data}</p>
+                    }
+                    return true
                 } )}
             </div>
         )

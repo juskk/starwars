@@ -7,6 +7,7 @@ import Input from '../../../UI/input/Input'
 import Button from '../../../UI/button/Button'
 import { toAuth } from '../../../store/actionCreators/authActions'
 import { RootState } from '../../../store'
+import { removeError } from '../../../store/slices/auth'
 
 
 const LogIn: React.FC = () => {
@@ -14,6 +15,10 @@ const LogIn: React.FC = () => {
     // eslint-disable-next-line
     const auth = useSelector((state: RootState) => state.auth)
     const dispatch = useDispatch()
+    React.useEffect( () => {
+        dispatch(removeError())   
+        // eslint-disable-next-line
+    }, [] )
 
     const [email, setEmail] = React.useState({
         validation: {

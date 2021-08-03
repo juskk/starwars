@@ -24,6 +24,7 @@ export const GET_PERSON = gql`
             skinColor
             homeworld {
                 name
+                id
             }
             filmConnection {
                 films {

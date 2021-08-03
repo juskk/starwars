@@ -175,7 +175,7 @@ const Main = () => {
     return (
         <div style={{color: 'white'}}>
             {pageInfo}
-            <div style={{height: '30px', width: '100%'}}></div>
+            
         </div>
     )
 }

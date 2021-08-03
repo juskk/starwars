@@ -34,9 +34,12 @@ const authSlice = createSlice({
         logOut: (state) => {
             state.localId = null
             state.token = null
+        },
+        removeError: (state) => {
+            state.error = null
         }
     }
 })
 
-export const {startAuth, authSuccess, authFail, logOut} = authSlice.actions
+export const {startAuth, authSuccess, authFail, logOut, removeError} = authSlice.actions
 export default authSlice.reducer
